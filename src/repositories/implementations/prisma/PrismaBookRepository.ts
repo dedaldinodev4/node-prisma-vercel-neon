@@ -1,8 +1,9 @@
 import { prismaClient } from "../../../database/PrismaClient";
 import { IBook } from "../../../dtos/Book";
+import { IBookRepository } from "../../IBookRepository";
 
 
-export class IBookRepository implements IBookRepository {
+export class PrismaBookRepository implements IBookRepository {
   private _repository = prismaClient.book;
 
   //* Create an book *//
@@ -32,6 +33,15 @@ export class IBookRepository implements IBookRepository {
   async findById(id: string): Promise<IBook | null> {
     const book = await this._repository.findFirst({
       where: { id }
+    });
+
+    return book ?? null;
+  }
+
+  //* Query a book where Id *//
+  async findByBarCode(bar_code: string): Promise<IBook | null> {
+    const book = await this._repository.findFirst({
+      where: { bar_code }
     });
 
     return book ?? null;
